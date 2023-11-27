@@ -13,10 +13,16 @@ namespace GameMain
     {
         public override bool UseNativeDialog { get; }
 
+        //MODIFY TE
+        private UpdatePackageInfo m_UpdatePackageInfo;
+
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             Log.Info("更新资源清单！！！");
-            
+
+            //MODIFY TE 添加小程序合集相对TE修改
+            m_UpdatePackageInfo = procedureOwner.GetData<UpdatePackageInfo>("updatePackageInfo");
+
             UILoadMgr.Show(UIDefine.UILoadUpdate,$"更新清单文件...");
             
             UpdateManifest(procedureOwner).Forget();
@@ -25,8 +31,9 @@ namespace GameMain
         private async UniTaskVoid UpdateManifest(ProcedureOwner procedureOwner)
         {
             await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
-            
-            var operation = GameModule.Resource.UpdatePackageManifestAsync(GameModule.Resource.PackageVersion);
+
+            //MODIFY TE
+            var operation = GameModule.Resource.UpdatePackageManifestAsync(GameModule.Resource.PackageVersion, customPackageName: m_UpdatePackageInfo.PackageName);
             
             await operation.ToUniTask();
             

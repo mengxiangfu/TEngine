@@ -36,6 +36,11 @@ namespace TEngine
         public string PackageVersion { set; get; }
 
         /// <summary>
+        /// 默认资源包名称。
+        /// </summary>
+        public string defaultPackageName = "DefaultPackage";
+
+        /// <summary>
         /// 资源包名称。
         /// </summary>
         public string packageName = "DefaultPackage";
@@ -102,10 +107,18 @@ namespace TEngine
         /// </summary>
         public int adaptiveReplacementCacheCapacity = 32;
 
+        // MODIFY TE
+        /// <summary>
+        /// 是否在UnloadUnused中
+        /// </summary>
+        public bool inUnloadUnused = false;
+
         private IResourceManager m_ResourceManager;
         private AsyncOperation m_AsyncOperation = null;
         private bool m_ForceUnloadUnusedAssets = false;
         private bool m_PreorderUnloadUnusedAssets = false;
+        // MODIFY TE
+        private bool m_ForceUnloadAllAssets = false;
         private bool m_PerformGCCollect = false;
         private float m_LastUnloadUnusedAssetsOperationElapseSeconds = 0f;
         private bool m_InitPackageByProcedure = true;
@@ -214,7 +227,7 @@ namespace TEngine
                 m_ResourceManager.SetReadWritePath(Application.persistentDataPath);
             }
 
-            m_ResourceManager.PackageName = packageName;
+            packageName = m_ResourceManager.PackageName = defaultPackageName;
             m_ResourceManager.PlayMode = playMode;
             m_ResourceManager.VerifyLevel = verifyLevel;
             m_ResourceManager.Milliseconds = milliseconds;
@@ -384,6 +397,21 @@ namespace TEngine
             }
         }
 
+        // MODIFY TE
+        /// <summary>
+        /// 强制释放defalutPackage的所有资源
+        /// </summary>
+        /// <param name="performGCCollect"></param>
+        public void ForceUnloadAllAssets(bool performGCCollect)
+        {
+            m_ForceUnloadUnusedAssets = true;
+            m_ForceUnloadAllAssets = true;
+            if (performGCCollect)
+            {
+                m_PerformGCCollect = true;
+            }
+        }
+
         /// <summary>
         /// 资源模块外部轮询（释放无用资源）。
         /// </summary>
@@ -397,6 +425,7 @@ namespace TEngine
                  m_LastUnloadUnusedAssetsOperationElapseSeconds >= minUnloadUnusedAssetsInterval))
             {
                 Log.Info("Unload unused assets...");
+                inUnloadUnused = true;
                 m_ForceUnloadUnusedAssets = false;
                 m_PreorderUnloadUnusedAssets = false;
                 m_LastUnloadUnusedAssetsOperationElapseSeconds = 0f;
@@ -405,7 +434,16 @@ namespace TEngine
 
             if (m_AsyncOperation is { isDone: true })
             {
-                m_ResourceManager.UnloadUnusedAssets();
+                // MODIFY TE
+                if (m_ForceUnloadAllAssets)
+                {
+                    m_ForceUnloadAllAssets = false;
+                    m_ResourceManager.ForceUnloadAllAssets();
+                }
+                else
+                {
+                    m_ResourceManager.UnloadUnusedAssets();
+                }
                 m_AsyncOperation = null;
                 if (m_PerformGCCollect)
                 {
@@ -413,6 +451,7 @@ namespace TEngine
                     m_PerformGCCollect = false;
                     GC.Collect();
                 }
+                inUnloadUnused = false;
             }
         }
 
@@ -434,6 +473,16 @@ namespace TEngine
         public void SetDefaultPackage(ResourcePackage package)
         {
             m_ResourceManager.SetDefaultPackage(package);
+        }
+
+        /// <summary>
+        /// 设置默认资源包。
+        /// </summary>
+        /// <param name="package">资源包。</param>
+        public void SetDefaultPackageName(string packageName)
+        {
+            this.packageName = packageName;
+            m_ResourceManager.PackageName = packageName;
         }
 
         /// <summary>

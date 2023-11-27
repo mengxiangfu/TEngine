@@ -23,6 +23,13 @@ namespace GameMain
 
             // 声音配置：根据用户配置数据，设置即将使用的声音选项
             InitSoundSettings();
+
+            //MODIFY TE 添加小程序合集相对TE修改
+            UpdatePackageInfo updatePackageInfo = new UpdatePackageInfo();
+            updatePackageInfo.PackageName = GameModule.Resource.defaultPackageName;
+            updatePackageInfo.MainDLLName = SettingsUtils.HybridCLRCustomGlobalSettings.LogicMainDllName;
+            updatePackageInfo.HotUpdateAssemblies = SettingsUtils.HybridCLRCustomGlobalSettings.HotUpdateAssemblies;
+            procedureOwner.SetData<UpdatePackageInfo>("updatePackageInfo", updatePackageInfo);
         }
 
         protected override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds, float realElapseSeconds)

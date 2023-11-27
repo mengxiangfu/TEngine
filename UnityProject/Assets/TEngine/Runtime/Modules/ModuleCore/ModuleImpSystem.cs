@@ -12,7 +12,7 @@ namespace TEngine
         /// 默认设计的模块数量。
         /// <remarks>有增删可以自行修改减少内存分配与GCAlloc。</remarks>
         /// </summary>
-        internal const int DesignModuleCount = 16;
+        internal const int DesignModuleCount = 17;
         private const string ModuleRootNameSpace = "TEngine.";
 
         private static readonly Dictionary<Type, ModuleImp> _moduleMaps = new Dictionary<Type, ModuleImp>(DesignModuleCount);

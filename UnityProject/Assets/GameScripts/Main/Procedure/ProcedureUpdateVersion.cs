@@ -16,9 +16,15 @@ namespace GameMain
 
         private ProcedureOwner _procedureOwner;
 
+        //MODIFY TE
+        private UpdatePackageInfo m_UpdatePackageInfo;
+
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             _procedureOwner = procedureOwner;
+
+            //MODIFY TE 添加小程序合集相对TE修改
+            m_UpdatePackageInfo = procedureOwner.GetData<UpdatePackageInfo>("updatePackageInfo");
 
             base.OnEnter(procedureOwner);
 
@@ -48,7 +54,8 @@ namespace GameMain
         {
             await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
 
-            var operation = GameModule.Resource.UpdatePackageVersionAsync();
+            //MODIFY TE
+            var operation = GameModule.Resource.UpdatePackageVersionAsync(customPackageName: m_UpdatePackageInfo.PackageName);
 
             try
             {
@@ -58,7 +65,8 @@ namespace GameMain
                 {
                     //线上最新版本operation.PackageVersion
                     GameModule.Resource.PackageVersion = operation.PackageVersion;
-                    Log.Debug($"Updated package Version : from {GameModule.Resource.GetPackageVersion()} to {operation.PackageVersion}");
+                    //MODIFY TE
+                    Log.Debug($"Updated package Version : from {GameModule.Resource.GetPackageVersion(customPackageName: m_UpdatePackageInfo.PackageName)} to {operation.PackageVersion}");
                     ChangeState<ProcedureUpdateManifest>(_procedureOwner);
                 }
                 else

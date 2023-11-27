@@ -35,6 +35,8 @@ namespace GameMain
         private Assembly m_MainLogicAssembly;
         private List<Assembly> m_HotfixAssemblys;
         private IFsm<IProcedureManager> m_procedureOwner;
+        //MODIFY TE
+        private UpdatePackageInfo m_UpdatePackageInfo;
 
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
@@ -43,6 +45,9 @@ namespace GameMain
             m_procedureOwner = procedureOwner;
             m_LoadAssemblyComplete = false;
             m_HotfixAssemblys = new List<Assembly>();
+
+            //MODIFY TE 添加小程序合集相对TE修改
+            m_UpdatePackageInfo = procedureOwner.GetData<UpdatePackageInfo>("updatePackageInfo");
 
             //AOT Assembly加载原始metadata
             if (SettingsUtils.HybridCLRCustomGlobalSettings.Enable)
@@ -67,7 +72,8 @@ namespace GameMain
             {
                 if (SettingsUtils.HybridCLRCustomGlobalSettings.Enable)
                 {
-                    foreach (string hotUpdateDllName in SettingsUtils.HybridCLRCustomGlobalSettings.HotUpdateAssemblies)
+                    // MODIFY TE
+                    foreach (string hotUpdateDllName in m_UpdatePackageInfo.HotUpdateAssemblies)
                     {
                         var assetLocation = hotUpdateDllName;
                         if (!m_enableAddressable)
@@ -81,7 +87,7 @@ namespace GameMain
                            
                         Log.Debug($"LoadAsset: [ {assetLocation} ]");
                         m_LoadAssetCount++;
-                        GameModule.Resource.LoadAssetAsync<TextAsset>(assetLocation,LoadAssetSuccess);
+                        GameModule.Resource.LoadAssetAsync<TextAsset>(assetLocation,LoadAssetSuccess, customPackageName:m_UpdatePackageInfo.PackageName);
                     }
 
                     m_LoadAssemblyWait = true;
@@ -116,27 +122,30 @@ namespace GameMain
         {
             ChangeState<ProcedureStartGame>(m_procedureOwner);
 #if UNITY_EDITOR
+            //MODIFY TE
             m_MainLogicAssembly = AppDomain.CurrentDomain.GetAssemblies().
-                First(assembly => $"{assembly.GetName().Name}.dll" == SettingsUtils.HybridCLRCustomGlobalSettings.LogicMainDllName);
+                First(assembly => $"{assembly.GetName().Name}.dll" == m_UpdatePackageInfo.MainDLLName);
 #endif
             if (m_MainLogicAssembly == null)
             {
                 Log.Fatal($"Main logic assembly missing.");
                 return;
             }
-            var appType = m_MainLogicAssembly.GetType("GameApp");
+            //MODIFY TE
+            var appType = m_MainLogicAssembly.GetType($"{m_MainLogicAssembly.GetName().Name}.GameApp");
             if (appType == null)
             {
-                Log.Fatal($"Main logic type 'GameMain' missing.");
+                Log.Fatal($"{m_UpdatePackageInfo.MainDLLName} type 'GameApp' missing.");
                 return;
             }
             var entryMethod = appType.GetMethod("Entrance");
             if (entryMethod == null)
             {
-                Log.Fatal($"Main logic entry method 'Entrance' missing.");
+                Log.Fatal($"{m_UpdatePackageInfo.MainDLLName} entry method 'Entrance' missing.");
                 return;
             }
-            object[] objects = new object[] { new object[] { m_HotfixAssemblys } };
+            //object[] objects = new object[] { new object[] { m_HotfixAssemblys } };
+            object[] objects = new object[] { new object[] {} };
             entryMethod.Invoke(appType, objects);
         }
 
@@ -145,13 +154,14 @@ namespace GameMain
             Assembly mainLogicAssembly = null;
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
-                if (string.Compare(SettingsUtils.HybridCLRCustomGlobalSettings.LogicMainDllName, $"{assembly.GetName().Name}.dll",
+                //MODIFY TE
+                if (string.Compare(m_UpdatePackageInfo.MainDLLName, $"{assembly.GetName().Name}.dll",
                         StringComparison.Ordinal) == 0)
                 {
                     mainLogicAssembly = assembly;
                 }
 
-                foreach (var hotUpdateDllName in SettingsUtils.HybridCLRCustomGlobalSettings.HotUpdateAssemblies)
+                foreach (var hotUpdateDllName in m_UpdatePackageInfo.HotUpdateAssemblies)
                 {
                     if (hotUpdateDllName == $"{assembly.GetName().Name}.dll")
                     {
@@ -159,7 +169,7 @@ namespace GameMain
                     }
                 }
 
-                if (mainLogicAssembly != null && m_HotfixAssemblys.Count == SettingsUtils.HybridCLRCustomGlobalSettings.HotUpdateAssemblies.Count)
+                if (mainLogicAssembly != null && m_HotfixAssemblys.Count == m_UpdatePackageInfo.HotUpdateAssemblies.Count)
                 {
                     break;
                 }
@@ -188,7 +198,8 @@ namespace GameMain
             try
             {
                 var assembly = Assembly.Load(textAsset.bytes);
-                if (string.Compare(SettingsUtils.HybridCLRCustomGlobalSettings.LogicMainDllName, assetName, StringComparison.Ordinal) == 0)
+                //MODIFY TE
+                if (string.Compare(m_UpdatePackageInfo.MainDLLName, $"{assembly.GetName().Name}.dll", StringComparison.Ordinal) == 0)
                 {
                     m_MainLogicAssembly = assembly;
                 }
@@ -224,6 +235,8 @@ namespace GameMain
                 m_LoadMetadataAssemblyComplete = true;
                 return;
             }
+            //MODIFY TE
+            int index = SettingsUtils.HybridCLRCustomGlobalSettings.AOTMetaAssemblies.Count;
             foreach (string aotDllName in SettingsUtils.HybridCLRCustomGlobalSettings.AOTMetaAssemblies)
             {
                 var assetLocation = aotDllName;
@@ -239,9 +252,14 @@ namespace GameMain
                 
                 Log.Debug($"LoadMetadataAsset: [ {assetLocation} ]");
                 m_LoadMetadataAssetCount++;
-                GameModule.Resource.LoadAssetAsync<TextAsset>(assetLocation,LoadMetadataAssetSuccess);
+                //MODIFY TE
+                index--;
+                if (index == 0)
+                {
+                    m_LoadMetadataAssemblyWait = true;
+                }
+                GameModule.Resource.LoadAssetAsync<TextAsset>(assetLocation,LoadMetadataAssetSuccess, customPackageName: GameModule.Resource.defaultPackageName);
             }
-            m_LoadMetadataAssemblyWait = true;
         }
 
         /// <summary>
@@ -279,7 +297,6 @@ namespace GameMain
             finally
             {
                 m_LoadMetadataAssemblyComplete = m_LoadMetadataAssemblyWait && 0 == m_LoadMetadataAssetCount;
-
             }
         }
     }

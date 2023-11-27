@@ -2,55 +2,58 @@
 using TEngine;
 using UnityEngine;
 
-public partial class GameApp
+namespace GameLogic
 {
-    private List<ILogicSys> _listLogicMgr;
-    
-    private void Init()
+    public partial class GameApp
     {
-        _listLogicMgr = new List<ILogicSys>();
-        RegisterAllSystem();
-        InitSystemSetting();
-    }
-    
-    /// <summary>
-    /// 设置一些通用的系统属性。
-    /// </summary>
-    private void InitSystemSetting()
-    {
-        
-    }
+        private List<ILogicSys> _listLogicMgr;
 
-    /// <summary>
-    /// 注册所有逻辑系统
-    /// </summary>
-    private void RegisterAllSystem()
-    {
-        //带生命周期的单例系统。
-        AddLogicSys(BehaviourSingleSystem.Instance);
-    }
-    
-    /// <summary>
-    /// 注册逻辑系统。
-    /// </summary>
-    /// <param name="logicSys">ILogicSys</param>
-    /// <returns></returns>
-    private bool AddLogicSys(ILogicSys logicSys)
-    {
-        if (_listLogicMgr.Contains(logicSys))
+        private void Init()
         {
-            Log.Fatal("Repeat add logic system: {0}", logicSys.GetType().Name);
-            return false;
+            _listLogicMgr = new List<ILogicSys>();
+            RegisterAllSystem();
+            InitSystemSetting();
         }
 
-        if (!logicSys.OnInit())
+        /// <summary>
+        /// 设置一些通用的系统属性。
+        /// </summary>
+        private void InitSystemSetting()
         {
-            Log.Fatal("{0} Init failed", logicSys.GetType().Name);
-            return false;
+
         }
 
-        _listLogicMgr.Add(logicSys);
+        /// <summary>
+        /// 注册所有逻辑系统
+        /// </summary>
+        private void RegisterAllSystem()
+        {
+            //带生命周期的单例系统。
+            AddLogicSys(BehaviourSingleSystem.Instance);
+        }
 
-        return true;
+        /// <summary>
+        /// 注册逻辑系统。
+        /// </summary>
+        /// <param name="logicSys">ILogicSys</param>
+        /// <returns></returns>
+        private bool AddLogicSys(ILogicSys logicSys)
+        {
+            if (_listLogicMgr.Contains(logicSys))
+            {
+                Log.Fatal("Repeat add logic system: {0}", logicSys.GetType().Name);
+                return false;
+            }
+
+            if (!logicSys.OnInit())
+            {
+                Log.Fatal("{0} Init failed", logicSys.GetType().Name);
+                return false;
+            }
+
+            _listLogicMgr.Add(logicSys);
+
+            return true;
+        }
     }
 }

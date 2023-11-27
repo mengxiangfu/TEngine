@@ -99,6 +99,14 @@ namespace TEngine
         public static SceneModule Scene => _scene ??= Get<SceneModule>();
         
         private static SceneModule _scene;
+
+        // MODIFY TE
+        /// <summary>
+        /// 小游戏合集模块。
+        /// </summary>
+        public static CollectionModule Collection => _collection ??= Get<CollectionModule>();
+
+        private static CollectionModule _collection;
         #endregion
 
         /// <summary>

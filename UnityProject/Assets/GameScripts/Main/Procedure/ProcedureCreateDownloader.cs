@@ -41,7 +41,9 @@ namespace GameMain
         {
             await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
 
-            _downloader = GameModule.Resource.CreateResourceDownloader();
+            //MODIFY TE 添加小程序合集相对TE修改
+            var updatePackageInfo = _procedureOwner.GetData<UpdatePackageInfo>("updatePackageInfo");
+            _downloader = GameModule.Resource.CreateResourceDownloader(updatePackageInfo.PackageName);
 
             if (_downloader.TotalDownloadCount == 0)
             {

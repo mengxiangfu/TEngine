@@ -52,7 +52,11 @@ namespace GameMain
                 }
             }
 
-            var initializationOperation = GameModule.Resource.InitPackage();
+            //MODIFY TE 添加小程序合集相对TE修改
+            var updatePackageInfo = procedureOwner.GetData<UpdatePackageInfo>("updatePackageInfo");
+            // 这里将defaultPackage改为运行具体游戏的package，小游戏合集需要用主package时，需要传ResourceModule.defaulePackageName
+            GameModule.Resource.SetDefaultPackageName(updatePackageInfo.PackageName);
+            var initializationOperation = GameModule.Resource.InitPackage(updatePackageInfo.PackageName);
 
             await UniTask.Delay(TimeSpan.FromSeconds(1f));
 

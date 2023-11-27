@@ -18,8 +18,10 @@ namespace GameMain
             Log.Info("清理未使用的缓存文件！");
             
             UILoadMgr.Show(UIDefine.UILoadUpdate,$"清理未使用的缓存文件...");
-            
-            var operation = GameModule.Resource.ClearUnusedCacheFilesAsync();
+
+            //MODIFY TE 添加小程序合集相对TE修改
+            var updatePackageInfo = procedureOwner.GetData<UpdatePackageInfo>("updatePackageInfo");
+            var operation = GameModule.Resource.ClearUnusedCacheFilesAsync(updatePackageInfo.PackageName);
             operation.Completed += Operation_Completed;
         }
         

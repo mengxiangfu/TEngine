@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 185f6993d5150494d98da50e26cb1c25, type: 3}
   m_Name: AssetBundleCollectorSetting
   m_EditorClassIdentifier: 
-  ShowPackageView: 0
+  ShowPackageView: 1
   EnableAddressable: 1
   LocationToLower: 0
   IncludeAssetGUID: 0
-  UniqueBundleName: 0
-  ShowEditorAlias: 0
+  UniqueBundleName: 1
+  ShowEditorAlias: 1
   Packages:
   - PackageName: DefaultPackage
     PackageDesc: "\u9ED8\u8BA4\u8D44\u6E90\u5305"
@@ -87,8 +87,80 @@ MonoBehaviour:
       AssetTags: DLL
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/AssetRaw/DLL
-        CollectorGUID: 3aad79ec1ea08c24c891bd3c669d4125
+      - CollectPath: Assets/AssetRaw/DLL/GameBase.dll.bytes
+        CollectorGUID: 8bf934adbcecf26499442fa359b9d2d0
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/AssetRaw/DLL/GameLogic.dll.bytes
+        CollectorGUID: 2a953d3dcce81c74c8c8ceaadbbcca39
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/AssetRaw/DLL/GameProto.dll.bytes
+        CollectorGUID: 0132e5ebb8309ae4a8576f44457a9d44
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/AssetRaw/DLL/mscorlib.dll.bytes
+        CollectorGUID: 39b9aba024ab7c247b754490bc69470a
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/AssetRaw/DLL/System.Core.dll.bytes
+        CollectorGUID: b7714d92e6f40644d8e9cc9a546a2fe1
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/AssetRaw/DLL/System.dll.bytes
+        CollectorGUID: a4101ae18240a0442ae08ea4b5886157
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/AssetRaw/DLL/TEngine.Runtime.dll.bytes
+        CollectorGUID: 04506705fa385c04a96a8e73ae54dfac
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/AssetRaw/DLL/UniTask.dll.bytes
+        CollectorGUID: a35ee2011b8ecc34cbbce5d4b3e8a6de
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/AssetRaw/DLL/UnityEngine.CoreModule.dll.bytes
+        CollectorGUID: 4f30722e0a331a64c81cf3a4965295d3
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/AssetRaw/DLL/YooAsset.dll.bytes
+        CollectorGUID: 523aa461794b1c44b80b741634f00b5f
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
@@ -167,6 +239,35 @@ MonoBehaviour:
       Collectors:
       - CollectPath: Assets/AssetRaw/Fonts
         CollectorGUID: 2473375c9ee163a4b861278b38091455
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+  - PackageName: GameTest
+    PackageDesc: "\u5C0F\u6E38\u620F\u5408\u96C6\u6D4B\u8BD5"
+    Groups:
+    - GroupName: Test
+      GroupDesc: "\u6D4B\u8BD5"
+      AssetTags: Test
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/AssetRaw/GameCollection/GameTest
+        CollectorGUID: 0e8c2a2162b13ea4182c9d8b38dbcf8a
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: DLL
+      GroupDesc: "\u4EE3\u7801"
+      AssetTags: DLL
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/AssetRaw/DLL/GameTest.dll.bytes
+        CollectorGUID: eb6a1318da0c154468c3f0dba19e630c
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory

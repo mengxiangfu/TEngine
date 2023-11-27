@@ -97,6 +97,44 @@ namespace TEngine
 
                 return null;
             }
+
+            //MODIFY TE
+            /// <summary>
+            /// 根据名称获取某个已加载的程序集 assemblyName需要带.dll
+            /// </summary>
+            /// <returns></returns>
+            public static System.Reflection.Assembly GetAssemblyByName(string assemblyName)
+            {
+                System.Reflection.Assembly mainAssembly = null;
+                foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    if (string.Compare(assemblyName, $"{assembly.GetName().Name}.dll",
+                            StringComparison.Ordinal) == 0)
+                    {
+                        mainAssembly = assembly;
+                        break;
+                    }
+                }
+
+                return mainAssembly;
+            }
+
+            public static System.Type GetTypeByAssemblyName(string assemblyName, string typeName)
+            {
+                var mainAssembly = Utility.Assembly.GetAssemblyByName(assemblyName);
+                if (mainAssembly == null)
+                {
+                    Log.Fatal($"assembly: {assemblyName} missing.");
+                    return null;
+                }
+                var appType = mainAssembly.GetType(typeName);
+                if (appType == null)
+                {
+                    Log.Fatal($"type: {typeName} missing.");
+                    return null;
+                }
+                return appType;
+            }
         }
     }
 }

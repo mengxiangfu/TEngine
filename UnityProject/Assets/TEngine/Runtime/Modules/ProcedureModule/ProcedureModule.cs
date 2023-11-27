@@ -169,5 +169,33 @@ namespace TEngine
             _procedureManager.StartProcedure(procedures[0].GetType());
             return true;
         }
+
+        /// <summary>
+        /// 重启流程。
+        /// <remarks>默认使用第一个流程作为启动流程。</remarks>
+        /// </summary>
+        /// <param name="procedures">新的的流程。</param>
+        /// <returns>是否重启成功。</returns>
+        /// <exception cref="GameFrameworkException">重启异常。</exception>
+        public bool StartProcedure(ProcedureBase entranceProcedure, params ProcedureBase[] procedures)
+        {
+            if (procedures == null || procedures.Length <= 0)
+            {
+                throw new GameFrameworkException("RestartProcedure Failed procedures is invalid.");
+            }
+
+            IFsmManager fsmManager = ModuleImpSystem.GetModule<IFsmManager>();
+
+            if (!fsmManager.DestroyFsm<IProcedureManager>())
+            {
+                return false;
+            }
+
+            _procedureManager = null;
+            _procedureManager = ModuleImpSystem.GetModule<IProcedureManager>();
+            _procedureManager.Initialize(fsmManager, procedures);
+            _procedureManager.StartProcedure(entranceProcedure.GetType());
+            return true;
+        }
     }
 }

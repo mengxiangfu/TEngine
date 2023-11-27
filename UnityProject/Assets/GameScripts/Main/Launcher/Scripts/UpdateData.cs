@@ -1,4 +1,5 @@
-﻿/// <summary>
+﻿using System.Collections.Generic;
+/// <summary>
 /// APP更新类型。
 /// </summary>
 public enum UpdateType

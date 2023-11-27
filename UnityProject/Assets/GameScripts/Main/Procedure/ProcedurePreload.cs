@@ -24,9 +24,15 @@ namespace GameMain
 
         private bool _hadInitConfigXml = false;
 
+        //MODIFY TE
+        private UpdatePackageInfo m_UpdatePackageInfo;
+
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
+
+            //MODIFY TE 添加小程序合集相对TE修改
+            m_UpdatePackageInfo = procedureOwner.GetData<UpdatePackageInfo>("updatePackageInfo");
 
             _loadedFlag.Clear();
 
@@ -133,13 +139,15 @@ namespace GameMain
                 _hadInitConfigXml = true;
                 return;
             }
-            AssetInfo[] assetInfos = GameModule.Resource.GetAssetInfos("PRELOAD");
+            //MODIFY TE
+            AssetInfo[] assetInfos = GameModule.Resource.GetAssetInfos("PRELOAD", m_UpdatePackageInfo.PackageName);
             foreach (var assetInfo in assetInfos)
             {
                 LoadConfig(assetInfo.Address);
             }
 #if UNITY_WEBGL
-            AssetInfo[] webAssetInfos = GameModule.Resource.GetAssetInfos("WEBGL_PRELOAD");
+            //MODIFY TE
+            AssetInfo[] webAssetInfos = GameModule.Resource.GetAssetInfos("WEBGL_PRELOAD", m_UpdatePackageInfo.PackageName);
             foreach (var assetInfo in webAssetInfos)
             {
                 LoadConfig(assetInfo.Address);
@@ -151,7 +159,8 @@ namespace GameMain
         private void LoadConfig(string configName)
         {
             _loadedFlag.Add(configName, false);
-            GameModule.Resource.LoadAssetAsync<TextAsset>(configName, OnLoadSuccess);
+            //MODIFY TE
+            GameModule.Resource.LoadAssetAsync<TextAsset>(configName, OnLoadSuccess,customPackageName: m_UpdatePackageInfo.PackageName);
         }
 
         private void OnLoadSuccess(AssetOperationHandle assetOperationHandle)
@@ -162,7 +171,8 @@ namespace GameMain
             }
             var location = assetOperationHandle.GetAssetInfo().Address;
             _loadedFlag[location] = true;
-            GameModule.Resource.PushPreLoadAsset(location, assetOperationHandle.AssetObject);
+            //MODIFY TE
+            GameModule.Resource.PushPreLoadAsset(location, assetOperationHandle.AssetObject, m_UpdatePackageInfo.PackageName);
             Log.Info("Load config '{0}' OK.", location);
             assetOperationHandle.Dispose();
         }
