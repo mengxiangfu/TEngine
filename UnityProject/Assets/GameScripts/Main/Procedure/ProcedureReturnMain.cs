@@ -30,7 +30,9 @@ namespace GameMain
             GameModule.Resource.ForceUnloadAllAssets(true);
             await UniTask.WaitUntil(() => !GameModule.Resource.inUnloadUnused);
 
-            //MODIFY TE 添加小程序合集相对TE修改
+            //TODO 卸载当前的HotUpdateAssemblies
+
+            //设置default UpdatePackageInfo
             UpdatePackageInfo updatePackageInfo = new UpdatePackageInfo();
             updatePackageInfo.PackageName = GameModule.Resource.defaultPackageName;
             updatePackageInfo.MainDLLName = SettingsUtils.HybridCLRCustomGlobalSettings.LogicMainDllName;

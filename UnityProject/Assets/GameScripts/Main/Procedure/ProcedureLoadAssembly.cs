@@ -49,8 +49,8 @@ namespace GameMain
             //MODIFY TE 添加小程序合集相对TE修改
             m_UpdatePackageInfo = procedureOwner.GetData<UpdatePackageInfo>("updatePackageInfo");
 
-            //AOT Assembly加载原始metadata
-            if (SettingsUtils.HybridCLRCustomGlobalSettings.Enable)
+            //AOT Assembly加载原始metadata MODIFY TE
+            if (SettingsUtils.HybridCLRCustomGlobalSettings.Enable && !GameModule.Base.LoadMetadataAssemblyComplete)
             {
 #if !UNITY_EDITOR
                 m_LoadMetadataAssemblyComplete = false;
@@ -197,8 +197,12 @@ namespace GameMain
 
             try
             {
-                var assembly = Assembly.Load(textAsset.bytes);
                 //MODIFY TE
+                if (!GameModule.Base.LoadCompleteAssemblys.TryGetValue(assetName, out var assembly))
+                {
+                    assembly = Assembly.Load(textAsset.bytes);
+                    GameModule.Base.LoadCompleteAssemblys[assetName] = assembly;
+                }
                 if (string.Compare(m_UpdatePackageInfo.MainDLLName, $"{assembly.GetName().Name}.dll", StringComparison.Ordinal) == 0)
                 {
                     m_MainLogicAssembly = assembly;

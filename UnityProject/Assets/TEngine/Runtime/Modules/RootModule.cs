@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 namespace TEngine
@@ -99,13 +101,28 @@ namespace TEngine
             }
         }
 
+        // MODIFY TE
+        /// <summary>
+        /// 存储已经加载过的dll，避免重复load报错。
+        /// </summary>
+        public Dictionary<string, Assembly> LoadCompleteAssemblys;
+
+        //MODIFY TE
+        /// <summary>
+        /// 是否已经进行过aot程序集补充
+        /// </summary>
+        public bool LoadMetadataAssemblyComplete;
+
         /// <summary>
         /// 游戏框架模块初始化。
         /// </summary>
         protected override void Awake()
         {
             base.Awake();
-            
+
+            // MODIFY TE
+            LoadCompleteAssemblys = new Dictionary<string, Assembly>();
+
             InitTextHelper();
             InitVersionHelper();
             InitLogHelper();
