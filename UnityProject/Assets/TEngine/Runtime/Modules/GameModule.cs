@@ -107,6 +107,13 @@ namespace TEngine
         public static CollectionModule Collection => _collection ??= Get<CollectionModule>();
 
         private static CollectionModule _collection;
+        
+        /// <summary>
+        /// 获取计时器模块。
+        /// </summary>
+        public static TimerModule Timer => _timer ??= Get<TimerModule>();
+        
+        private static TimerModule _timer;
         #endregion
 
         /// <summary>
@@ -161,6 +168,7 @@ namespace TEngine
             _ui = null;
             _localization = null;
             _scene = null;
+            _timer = null;
         }
     }
 }
