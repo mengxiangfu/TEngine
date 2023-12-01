@@ -29,7 +29,7 @@ namespace GameTest
             Utility.Unity.AddDestroyListener(Instance.OnDestroy);
             Utility.Unity.AddOnDrawGizmosListener(Instance.OnDrawGizmos);
             Utility.Unity.AddOnApplicationPauseListener(Instance.OnApplicationPause);
-            GameModule.Procedure.RestartProcedure(new GameLogic.OnEnterGameAppProcedure());
+            GameModule.Procedure.RestartProcedure(new GameTest.OnEnterGameAppProcedure());
             Instance.StartGameLogic();
         }
 
