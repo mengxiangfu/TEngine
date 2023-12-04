@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3708985, g: 0.3783704, b: 0.35722548, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -452,6 +452,7 @@ Transform:
   - {fileID: 914171638}
   - {fileID: 450845953}
   - {fileID: 1047779124}
+  - {fileID: 794712461}
   m_Father: {fileID: 1195690679}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -476,6 +477,7 @@ MonoBehaviour:
   m_GameSpeed: 1
   m_RunInBackground: 1
   m_NeverSleep: 1
+  LoadMetadataAssemblyComplete: 0
 --- !u!1 &790894653
 GameObject:
   m_ObjectHideFlags: 0
@@ -542,6 +544,71 @@ MonoBehaviour:
     m_FatalColor:
       serializedVersion: 2
       rgba: 4281545650
+--- !u!1 &794712460
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 794712461}
+  - component: {fileID: 794712462}
+  m_Layer: 0
+  m_Name: Collection
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &794712461
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794712460}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 709048975}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &794712462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794712460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cb74a18eae176f47adc85f91eb6340c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InCollectionGame: 0
+  availableProcedureTypeNames:
+  - GameMain.ProcedureClearCache
+  - GameMain.ProcedureCollectionLaunch
+  - GameMain.ProcedureCreateDownloader
+  - GameMain.ProcedureDownloadFile
+  - GameMain.ProcedureDownloadOver
+  - GameMain.ProcedureInitPackage
+  - GameMain.ProcedureInitResources
+  - GameMain.ProcedureLoadAssembly
+  - GameMain.ProcedurePreload
+  - GameMain.ProcedureSplash
+  - GameMain.ProcedureStartGame
+  - GameMain.ProcedureUpdateManifest
+  - GameMain.ProcedureUpdateVersion
+  entranceProcedureTypeName: GameMain.ProcedureCollectionLaunch
+  availableShutDownProcedureTypeNames:
+  - GameMain.ProcedureLoadAssembly
+  - GameMain.ProcedureReturnMain
+  - GameMain.ProcedureStartGame
+  shutDownProcedureTypeName: GameMain.ProcedureReturnMain
 --- !u!1 &803382965
 GameObject:
   m_ObjectHideFlags: 0
@@ -805,6 +872,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35b9a0ed33eb4c928f1d408679c9ef51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultPackageName: DefaultPackage
   packageName: DefaultPackage
   playMode: 1
   verifyLevel: 1
@@ -815,6 +883,7 @@ MonoBehaviour:
   downloadingMaxNum: 3
   failedTryAgain: 3
   adaptiveReplacementCacheCapacity: 32
+  inUnloadUnused: 0
 --- !u!1 &1029867561
 GameObject:
   m_ObjectHideFlags: 0

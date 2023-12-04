@@ -70,7 +70,7 @@ namespace TEngine
                 {
                     Instance.RegCacheResPath(config.ResPath, config.CacheTime, config.MaxPoolCnt, config.PoolGoFreeTime, config.MinPoolCnt);
                 }
-            });
+            }, false, GameModule.Resource.defaultPackageName);
         }
         
         /// <summary>

@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using TEngine;
 
-namespace GameLogic
+namespace GameMain
 {
     [Window(UILayer.UI)]
     class JumpView : UIWindow

@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Reflection;
 using GameBase;
-using GameLogic;
+using GameMain;
 using TEngine;
 
-namespace GameLogic
+namespace GameMain
 {
     /// <summary>
     /// 游戏App。
@@ -28,7 +28,7 @@ namespace GameLogic
             Utility.Unity.AddDestroyListener(Instance.OnDestroy);
             Utility.Unity.AddOnDrawGizmosListener(Instance.OnDrawGizmos);
             Utility.Unity.AddOnApplicationPauseListener(Instance.OnApplicationPause);
-            GameModule.Procedure.RestartProcedure(new GameLogic.OnEnterGameAppProcedure());
+            GameModule.Procedure.RestartProcedure(new GameMain.OnEnterGameAppProcedure());
             Instance.StartGameLogic();
         }
 

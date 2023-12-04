@@ -1,6 +1,6 @@
 ﻿using TEngine;
 
-namespace GameLogic
+namespace GameMain
 {
     public class OnEnterGameAppProcedure : ProcedureBase
     {
